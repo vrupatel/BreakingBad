@@ -10,9 +10,12 @@ class Constant {
 
   static Color = '#CFD5DC';
   static white = 'white';
+  static black = 'black';
+  static pink = '#CA184E';
   static primaryGreen = '#18CA75';
   static favoriteIconColor = '#3D3D3D';
   static headerBackgroundColor = '#070707';
+  static bubbleBackGroundColor = '#1A1A1A';
 }
 
 export default Constant;

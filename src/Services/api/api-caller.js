@@ -1,9 +1,8 @@
 import axios from 'axios';
 import Constant from '../../CommonFiles/Constant';
-// import {store} from '../../Store';
 
 export default async ({method, endpoint, isFormData, data} = {}) => {
-  console.log('data', data);
+  // console.log('data', data);
 
   return axios({
     method,

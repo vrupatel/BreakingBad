@@ -1,88 +1,67 @@
 import React, {useEffect} from 'react';
-import {View, Text, SafeAreaView, FlatList, Image} from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  FlatList,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon2 from 'react-native-vector-icons/AntDesign';
 import Icon4 from 'react-native-vector-icons/Ionicons';
 import Constant from '../../CommonFiles/Constant';
-import {onCharactersStart} from '../../Store/Actions/Characters';
+import CommonStyle from '../../CommonFiles/CommonStyle';
+import {onCharactersFav} from '../../Store/Actions/Characters';
 
-const FavouriteListScreen = () => {
-  //   const dispatch = useDispatch();
-
+const FavouriteListScreen = ({navigation}) => {
   const {charactersList, loading} = useSelector(state => state.Characters);
+  const favouriteCharList = charactersList.filter(item => {
+    if (item.isFavouriteChar == true) return item;
+  });
 
-  console.log('Home----->', charactersList);
-  useEffect(() => {
-    setTimeout(() => {
-      //   dispatch(onCharactersStart());
-    }, 3000);
-  }, []);
+  const dispatch = useDispatch();
+  useEffect(() => {}, []);
 
   const renderCharactersList = ({item, index}) => {
-    // console.log('index', index);
     return (
-      <View
-        style={{
-          flex: 1,
-          margin: 8,
-          width: Constant.width / 2 - 20,
-          borderRadius: 8,
-
-          // shadowColor: 'gray',
-          // shadowOffset: {width: 0, height: 1},
-          // shadowOpacity: 0.5,
-          // shadowRadius: 2,
-          // elevation: 3,
-          // padding: 8,
-        }}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('CharacterDetails', {
+            Char_Id: item.char_id,
+            characterDetails: item,
+          })
+        }
+        style={CommonStyle.characterContainer}>
         <Image
           source={{uri: item.img}}
-          style={{
-            height: 230,
-            width: '100%',
-            borderRadius: 5,
-          }}
+          style={CommonStyle.characterImage}
           resizeMode="stretch"
         />
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            marginTop: 5,
-            // alignItems: 'center',
-          }}>
+        <View style={CommonStyle.characterTextContainer}>
           <View>
-            <Text
-              numberOfLines={1}
-              style={{
-                color: 'white',
-                fontFamily: 'Roboto-Bold',
-                fontSize: 16,
-                fontWeight: '700',
-              }}>
+            <Text numberOfLines={1} style={CommonStyle.characterNameText}>
               {item.name}
             </Text>
-            <Text style={{color: 'white', fontSize: 14, fontWeight: '300'}}>
+            <Text style={CommonStyle.characterNickNameText}>
               {item.nickname}
             </Text>
           </View>
-          <Icon4
-            name={
-              // this.state.detailsObj.isFavourite
-              //   ? "ios-heart"  :
-              'heart-outline'
-            }
-            size={(Constant.width / 100) * 6}
-            color={Constant.favoriteIconColor}
-          />
+          <TouchableOpacity
+            onPress={() => dispatch(onCharactersFav(item.char_id))}>
+            <Icon4
+              name={'ios-heart'}
+              size={(Constant.width / 100) * 6}
+              color={Constant.primaryGreen}
+            />
+          </TouchableOpacity>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   };
 
   return (
-    // <SafeAreaView >
-    <View style={{flex: 1, backgroundColor: 'black'}}>
+    <SafeAreaView style={CommonStyle.SafeAreaView}>
       {/* <View
         style={{
           paddingHorizontal: 15,
@@ -115,16 +94,14 @@ const FavouriteListScreen = () => {
         </View>
       </View> */}
       <FlatList
-        data={charactersList}
-        // showsVerticalScrollIndicator={false}
+        data={favouriteCharList}
+        showsVerticalScrollIndicator={false}
         renderItem={renderCharactersList}
         numColumns={2}
-        // keyExtractor={item => item.char_id}
         keyExtractor={(item, index) => index}
         style={{flex: 1}}
       />
-    </View>
-    // </SafeAreaView>
+    </SafeAreaView>
   );
 };
 
